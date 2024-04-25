@@ -4,7 +4,42 @@
     {
         static void Main(string[] args)
         {
-            var members = new List<Member>
+            var members = GetAll();
+            do
+            {
+                Console.WriteLine("1. Return a list of members who is Male");
+                Console.WriteLine("2. Return the oldest one based on Age");
+                Console.WriteLine("3. Return a new list that contains Full Name only ( Full Name = Last Name + First Name)");
+                Console.WriteLine("4. Return 3 lists: birth year is 2000/birth year greater than 2000/birth year less than 2000");
+                Console.WriteLine("5. Return the first person who was born in Ha Noi.");
+                Console.WriteLine("6. Exit");
+                int choice = GetChoice();
+
+                switch (choice)
+                {
+                    case 1:
+                        AllMaleMembers(members);
+                        break;
+                    case 2:
+                        OldestMember(members);
+                        break;
+                    case 3:
+                        GetFullName(members);
+                        break;
+                    case 4:
+                        GetListsAge(members);
+                        break;
+                    case 5:
+                        FirstBornHaNoi(members);
+                        break;
+                    case 6: return;
+                }
+            } while (true);
+        }
+
+        private static List<Member> GetAll()
+        {
+            return new List<Member>
             {
                 new Member
                 {
@@ -51,31 +86,53 @@
                     PhoneNumber = "7329074222"
                 }
             };
+        }
 
-            Console.WriteLine("All male mem:");
-            foreach (var member in members)
+        private static int GetChoice()
+        {
+            do
             {
-                if(member.Gender == "Male")
-                    Console.WriteLine(member);
-            }
-            Console.WriteLine("========================");
-            Console.WriteLine("Oldest one:");
-            var oldestAge = 0;
-            Member target = new Member();
-            foreach (var member in members)
-            {
-                if (member.Age > oldestAge){
-                    target = member;
-                    oldestAge = member.Age;
+                int choice;
+                try
+                {
+                    Console.Write("Enter choice: ");
+                    string inputChoice = Console.ReadLine();
+                    choice = int.Parse(inputChoice);
+                    if (choice <= 0 || choice > 6)
+                    {
+                        Console.WriteLine("Input invalid");
+                        continue;
+                    }
+
+                    return choice;
                 }
-            }
-            Console.WriteLine(target);
-            Console.WriteLine("========================");
-            Console.WriteLine("By full name:");
-            foreach (var member in members)
+                catch (Exception e)
+                {
+                    Console.WriteLine("Input invalid");
+                }
+            } while (true);
+        }
+
+        private static void FirstBornHaNoi(List<Member> members)
+        {
+            Console.WriteLine("===========================");
+            Console.WriteLine("First person who was born in Ha Noi:");
+            while (true)
             {
-                Console.WriteLine(member.LastName+" "+member.FirstName);
+                foreach (var member in members)
+                {
+                    if (member.BirthPlace == "Ha Noi")
+                    {
+                        Console.WriteLine(member);
+                        break;
+                    }
+                }
+                break;
             }
+        }
+
+        private static void GetListsAge(List<Member> members)
+        {
             Console.WriteLine("========================");
             var equal = new List<Member>();
             var greater = new List<Member>();
@@ -85,7 +142,7 @@
                 var birthYear = member.DateOfBirth.Year;
                 switch (birthYear)
                 {
-                    case int i when i > 2000:
+                    case var i when i > 2000:
                         greater.Add(member);
                         break;
                     case var i when i < 2000:
@@ -113,21 +170,45 @@
             {
                 Console.WriteLine(member);
             }
+        }
 
-            Console.WriteLine("===========================");
-            Console.WriteLine("First person who was born in Ha Noi:");
-            while (true)
+        private static void GetFullName(List<Member> members)
+        {
+            Console.WriteLine("========================");
+            Console.WriteLine("By full name:");
+            foreach (var member in members)
             {
-                foreach (var member in members)
-                {
-                    if (member.BirthPlace == "Ha Noi")
-                    {
-                        Console.WriteLine(member);
-                        break;
-                    }
-                }
-                break;
+                Console.WriteLine(member.FullName);
             }
         }
+
+        private static void OldestMember(List<Member> members)
+        {
+            Console.WriteLine("========================");
+            Console.WriteLine("Oldest one:");
+            var oldestAge = 0;
+            Member target = new Member();
+            foreach (var member in members)
+            {
+                if (DateTime.Now.Year - member.DateOfBirth.Year > oldestAge)
+                {
+                    target = member;
+                    oldestAge = member.Age;
+                }
+            }
+            Console.WriteLine(target);
+        }
+
+        private static void AllMaleMembers(List<Member> members)
+        {
+            Console.WriteLine("All male mem:");
+            foreach (var member in members)
+            {
+                if (member.Gender == "Male")
+                    Console.WriteLine(member);
+            }
+        }
+
+        
     }
 }
