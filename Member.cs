@@ -11,7 +11,7 @@
         public string PhoneNumber { get; set; }
 
         public string BirthPlace { get; set; }
-        public int Age { get; set; }
+        public int Age => DateTime.Now.Year - DateOfBirth.Year;
         public bool IsGraduated { get; set; }
 
         public override string ToString()

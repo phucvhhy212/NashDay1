@@ -7,6 +7,7 @@
             var members = GetAll();
             do
             {
+                Console.WriteLine("**********************************************************************************************");
                 Console.WriteLine("1. Return a list of members who is Male");
                 Console.WriteLine("2. Return the oldest one based on Age");
                 Console.WriteLine("3. Return a new list that contains Full Name only ( Full Name = Last Name + First Name)");
@@ -32,7 +33,11 @@
                     case 5:
                         FirstBornHaNoi(members);
                         break;
-                    case 6: return;
+                    case 6: 
+                        return;
+                    default:
+                        Console.WriteLine("Input invalid");
+                        break;
                 }
             } while (true);
         }
@@ -45,7 +50,6 @@
                 {
                     FirstName = "Huy1",
                     LastName = "Phuc1",
-                    Age = 15,
                     BirthPlace = "Ha Noi",
                     DateOfBirth = DateTime.Today,
                     Gender = "Female",
@@ -56,7 +60,6 @@
                 {
                     FirstName = "Huy2",
                     LastName = "Phuc2",
-                    Age = 15,
                     BirthPlace = "HN",
                     DateOfBirth = DateTime.Parse("2000-11-02"),
                     Gender = "Male",
@@ -67,7 +70,6 @@
                 {
                     FirstName = "Huy3",
                     LastName = "Phuc3",
-                    Age = 18,
                     BirthPlace = "Ha Noi",
                     DateOfBirth = DateTime.Parse("2000-12-02"),
                     Gender = "Male",
@@ -78,7 +80,6 @@
                 {
                     FirstName = "Huy4",
                     LastName = "Phuc4",
-                    Age = 18,
                     BirthPlace = "Ha Noi",
                     DateOfBirth = DateTime.Parse("1999-12-02"),
                     Gender = "Male",
@@ -108,14 +109,13 @@
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Input invalid");
+                    Console.WriteLine($"Input invalid: {e.Message}");
                 }
             } while (true);
         }
 
         private static void FirstBornHaNoi(List<Member> members)
         {
-            Console.WriteLine("===========================");
             Console.WriteLine("First person who was born in Ha Noi:");
             while (true)
             {
@@ -133,7 +133,6 @@
 
         private static void GetListsAge(List<Member> members)
         {
-            Console.WriteLine("========================");
             var equal = new List<Member>();
             var greater = new List<Member>();
             var less = new List<Member>();
@@ -174,7 +173,6 @@
 
         private static void GetFullName(List<Member> members)
         {
-            Console.WriteLine("========================");
             Console.WriteLine("By full name:");
             foreach (var member in members)
             {
@@ -184,7 +182,6 @@
 
         private static void OldestMember(List<Member> members)
         {
-            Console.WriteLine("========================");
             Console.WriteLine("Oldest one:");
             var oldestAge = 0;
             Member target = new Member();
