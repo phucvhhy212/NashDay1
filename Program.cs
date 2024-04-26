@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Day1
 {
@@ -37,7 +38,7 @@ namespace Day1
                         FirstBornHaNoi(members);
                         break;
                     case 6:
-                        await PrintPrimeNumber();
+                        PrintPrimeNumber();
                         break;
                     case 7: 
                         return;
@@ -96,27 +97,46 @@ namespace Day1
                     Console.WriteLine($"Input invalid {e.Message}");
                 }
             } while (true);
-
+            Stopwatch syncStopwatch = Stopwatch.StartNew();
             for (int i = from; i <= to; i++)
             {
-                if (IsPrimeNumber(i))
+                var i1 = i;
+                tasks.Add(Task.Run(() =>
                 {
-                    var i1 = i;
-                    tasks.Add(Task.Run(() =>
+                    if (IsPrimeNumber(number: i1))
                     {
                         Console.WriteLine(i1);
-                    }));
-                }
+                    }
+                }));
             }
             Task.WaitAll(tasks.ToArray());
+            syncStopwatch.Stop();
+            Console.WriteLine($"Thời gian thực hiện async: {syncStopwatch.ElapsedMilliseconds} ms");
+            
+            syncStopwatch.Start();
+            for (int i = from; i <= to; i++)
+            {
+                if (IsPrimeNumber(number: i))
+                {
+                    Console.WriteLine(i);
+                }
+
+            }
+            syncStopwatch.Stop();
+            Console.WriteLine($"Thời gian thực hiện sync: {syncStopwatch.ElapsedMilliseconds} ms");
         }
 
 
         private static bool IsPrimeNumber(int number)
         {
-            bool check = true;
-            if(number == 3) return true;
-            if(number < 4) return false;
+            if (number <= 1)
+            {
+                return false;
+            }
+            if (number <= 3)
+            {
+                return true;
+            }
             for (int i = 2; i < Math.Sqrt(number); i++)
             {
                 if (number % i == 0)
@@ -124,7 +144,7 @@ namespace Day1
                     return false;
                 }
             }
-            return check;
+            return true;
         }
         private static List<Member> GetAll()
         {
