@@ -1,8 +1,10 @@
-﻿namespace Day1
+﻿using System.Threading.Tasks;
+
+namespace Day1
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var members = GetAll();
             do
@@ -13,7 +15,8 @@
                 Console.WriteLine("3. Return a new list that contains Full Name only ( Full Name = Last Name + First Name)");
                 Console.WriteLine("4. Return 3 lists: birth year is 2000/birth year greater than 2000/birth year less than 2000");
                 Console.WriteLine("5. Return the first person who was born in Ha Noi.");
-                Console.WriteLine("6. Exit");
+                Console.WriteLine("6. Print prime number in range");
+                Console.WriteLine("7. Exit");
                 int choice = GetChoice();
 
                 switch (choice)
@@ -33,7 +36,10 @@
                     case 5:
                         FirstBornHaNoi(members);
                         break;
-                    case 6: 
+                    case 6:
+                        await PrintPrimeNumber();
+                        break;
+                    case 7: 
                         return;
                     default:
                         Console.WriteLine("Input invalid");
@@ -42,6 +48,70 @@
             } while (true);
         }
 
+        private static async Task PrintPrimeNumber()
+        {
+            int from = 0;
+            int to = 0;
+            do
+            {
+                Console.Write("From: ");
+                string fromString = Console.ReadLine();
+                try
+                {
+                    int.TryParse(fromString, out from);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Input invalid {e.Message}");
+                }
+            } while (true);
+
+            do
+            {
+                Console.Write("To: ");
+                string toString = Console.ReadLine();
+                try
+                {
+                    int.TryParse(toString, out to);
+                    if (from > to)
+                    {
+                        Console.WriteLine("Input invalid");
+                    }
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Input invalid {e.Message}");
+                }
+            } while (true);
+
+            for (int i = from; i <= to; i++)
+            {
+                if (IsPrimeNumber(number: i))
+                {
+                    await Task.Delay(100);
+                    Console.WriteLine(i);
+                }
+            }
+        }
+
+
+        private static bool IsPrimeNumber(int number)
+        {
+            bool check = true;
+            if(number < 2) return false;
+            if(number == 3) return true;
+            if(number == 4) return false;
+            for (int i = 2; i < Math.Sqrt(number); i++)
+            {
+                if (number % i == 0)
+                {
+                    return false;
+                }
+            }
+            return check;
+        }
         private static List<Member> GetAll()
         {
             return new List<Member>
@@ -119,14 +189,16 @@
             Console.WriteLine("First person who was born in Ha Noi:");
             while (true)
             {
-                foreach (var member in members)
-                {
-                    if (member.BirthPlace == "Ha Noi")
-                    {
-                        Console.WriteLine(member);
-                        break;
-                    }
-                }
+                //foreach (var member in members)
+                //{
+                //    if (member.BirthPlace == "Ha Noi")
+                //    {
+                //        Console.WriteLine(member);
+                //        break;
+                //    }
+                //}
+                var mem = members.FirstOrDefault(x => x.BirthPlace == "Ha Noi");
+                Console.WriteLine(mem);
                 break;
             }
         }
@@ -174,38 +246,40 @@
         private static void GetFullName(List<Member> members)
         {
             Console.WriteLine("By full name:");
-            foreach (var member in members)
+            var fullNames = members.Select(x => x.FullName);
+            foreach (var fullName in fullNames)
             {
-                Console.WriteLine(member.FullName);
+                Console.WriteLine(fullName);
             }
         }
 
         private static void OldestMember(List<Member> members)
         {
             Console.WriteLine("Oldest one:");
-            var oldestAge = 0;
-            Member target = new Member();
-            foreach (var member in members)
-            {
-                if (DateTime.Now.Year - member.DateOfBirth.Year > oldestAge)
-                {
-                    target = member;
-                    oldestAge = member.Age;
-                }
-            }
+            //var oldestAge = 0;
+            //Member target = new Member();
+            //foreach (var member in members)
+            //{
+            //    if (DateTime.Now.Year - member.DateOfBirth.Year > oldestAge)
+            //    {
+            //        target = member;
+            //        oldestAge = member.Age;
+            //    }
+            //}
+            var target = members.FirstOrDefault(m => DateTime.Now.Year - m.DateOfBirth.Year == members.Max(x => DateTime.Now.Year - x.DateOfBirth.Year));
             Console.WriteLine(target);
         }
 
         private static void AllMaleMembers(List<Member> members)
         {
             Console.WriteLine("All male mem:");
-            foreach (var member in members)
+            var males = members.Where(x => x.Gender == "Male");
+            foreach (var member in males)
             {
-                if (member.Gender == "Male")
-                    Console.WriteLine(member);
+                Console.WriteLine(member);
             }
         }
 
-        
+
     }
 }
