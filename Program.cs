@@ -37,7 +37,7 @@ namespace Day1
                         FirstBornHaNoi(members);
                         break;
                     case 6:
-                        Task.WaitAll(PrintPrimeNumber());
+                        await PrintPrimeNumber();
                         break;
                     case 7: 
                         return;
@@ -50,6 +50,7 @@ namespace Day1
 
         private static async Task PrintPrimeNumber()
         {
+            var tasks = new List<Task>();
             int from = 0;
             int to = 0;
             do
@@ -98,21 +99,24 @@ namespace Day1
 
             for (int i = from; i <= to; i++)
             {
-                if (IsPrimeNumber(number: i))
+                if (IsPrimeNumber(i))
                 {
-                    await Task.Delay(100);
-                    Console.WriteLine(i);
+                    var i1 = i;
+                    tasks.Add(Task.Run(() =>
+                    {
+                        Console.WriteLine(i1);
+                    }));
                 }
             }
+            Task.WaitAll(tasks.ToArray());
         }
 
 
         private static bool IsPrimeNumber(int number)
         {
             bool check = true;
-            if(number < 2) return false;
             if(number == 3) return true;
-            if(number == 4) return false;
+            if(number < 4) return false;
             for (int i = 2; i < Math.Sqrt(number); i++)
             {
                 if (number % i == 0)
@@ -197,12 +201,8 @@ namespace Day1
         private static void FirstBornHaNoi(List<Member> members)
         {
             Console.WriteLine("First person who was born in Ha Noi:");
-            while (true)
-            {
-                var mem = members.FirstOrDefault(x => x.BirthPlace == "Ha Noi");
-                Console.WriteLine(mem);
-                break;
-            }
+            var mem = members.FirstOrDefault(x => x.BirthPlace == "Ha Noi");
+            Console.WriteLine(mem);
         }
 
         private static void GetListsAge(List<Member> members)
