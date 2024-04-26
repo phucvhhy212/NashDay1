@@ -58,7 +58,12 @@ namespace Day1
                 string fromString = Console.ReadLine();
                 try
                 {
-                    int.TryParse(fromString, out from);
+
+                    if (!int.TryParse(fromString, out from))
+                    {
+                        Console.WriteLine("Input invalid");
+                        continue;
+                    }
                     break;
                 }
                 catch (Exception e)
@@ -73,7 +78,11 @@ namespace Day1
                 string toString = Console.ReadLine();
                 try
                 {
-                    int.TryParse(toString, out to);
+                    if(!int.TryParse(toString, out to))
+                    {
+                        Console.WriteLine("Input invalid");
+                        continue;
+                    }
                     if (from > to)
                     {
                         Console.WriteLine("Input invalid");
@@ -190,14 +199,6 @@ namespace Day1
             Console.WriteLine("First person who was born in Ha Noi:");
             while (true)
             {
-                //foreach (var member in members)
-                //{
-                //    if (member.BirthPlace == "Ha Noi")
-                //    {
-                //        Console.WriteLine(member);
-                //        break;
-                //    }
-                //}
                 var mem = members.FirstOrDefault(x => x.BirthPlace == "Ha Noi");
                 Console.WriteLine(mem);
                 break;
@@ -206,39 +207,18 @@ namespace Day1
 
         private static void GetListsAge(List<Member> members)
         {
-            var equal = new List<Member>();
-            var greater = new List<Member>();
-            var less = new List<Member>();
-            foreach (var member in members)
-            {
-                var birthYear = member.DateOfBirth.Year;
-                switch (birthYear)
-                {
-                    case var i when i > 2000:
-                        greater.Add(member);
-                        break;
-                    case var i when i < 2000:
-                        less.Add(member);
-                        break;
-                    default:
-                        equal.Add(member);
-                        break;
-
-                }
-            }
-
             Console.WriteLine("Birth year greater than 2000:");
-            foreach (var member in greater)
+            foreach (var member in members.Where(x => x.DateOfBirth.Year > 2000))
             {
                 Console.WriteLine(member);
             }
             Console.WriteLine("Birth year less than 2000:");
-            foreach (var member in less)
+            foreach (var member in members.Where(x => x.DateOfBirth.Year < 2000))
             {
                 Console.WriteLine(member);
             }
             Console.WriteLine("Birth year equal 2000:");
-            foreach (var member in equal)
+            foreach (var member in members.Where(x => x.DateOfBirth.Year == 2000))
             {
                 Console.WriteLine(member);
             }
@@ -247,8 +227,7 @@ namespace Day1
         private static void GetFullName(List<Member> members)
         {
             Console.WriteLine("By full name:");
-            var fullNames = members.Select(x => x.FullName);
-            foreach (var fullName in fullNames)
+            foreach (var fullName in members.Select(x => x.FullName))
             {
                 Console.WriteLine(fullName);
             }
@@ -257,16 +236,6 @@ namespace Day1
         private static void OldestMember(List<Member> members)
         {
             Console.WriteLine("Oldest one:");
-            //var oldestAge = 0;
-            //Member target = new Member();
-            //foreach (var member in members)
-            //{
-            //    if (DateTime.Now.Year - member.DateOfBirth.Year > oldestAge)
-            //    {
-            //        target = member;
-            //        oldestAge = member.Age;
-            //    }
-            //}
             var target = members.FirstOrDefault(m => DateTime.Now.Year - m.DateOfBirth.Year == members.Max(x => DateTime.Now.Year - x.DateOfBirth.Year));
             Console.WriteLine(target);
         }
@@ -274,8 +243,7 @@ namespace Day1
         private static void AllMaleMembers(List<Member> members)
         {
             Console.WriteLine("All male mem:");
-            var males = members.Where(x => x.Gender == "Male");
-            foreach (var member in males)
+            foreach (var member in members.Where(x => x.Gender == "Male"))
             {
                 Console.WriteLine(member);
             }
