@@ -77,6 +77,7 @@ namespace Day1
                     if (from > to)
                     {
                         Console.WriteLine("Input invalid");
+                        continue;
                     }
                     break;
                 }
