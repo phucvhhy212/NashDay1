@@ -37,7 +37,7 @@ namespace Day1
                         FirstBornHaNoi(members);
                         break;
                     case 6:
-                        await PrintPrimeNumber();
+                        Task.WaitAll(PrintPrimeNumber());
                         break;
                     case 7: 
                         return;
@@ -169,7 +169,7 @@ namespace Day1
                     Console.Write("Enter choice: ");
                     string inputChoice = Console.ReadLine();
                     choice = int.Parse(inputChoice);
-                    if (choice <= 0 || choice > 6)
+                    if (choice <= 0 || choice > 7)
                     {
                         Console.WriteLine("Input invalid");
                         continue;
